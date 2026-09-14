@@ -5,7 +5,7 @@ const baseEventsNavHtml = `
     </button>
     <div class="header-nav-folder-content" id="events"></div>
   </div>
-  `;
+`;
 
 async function updateEventsNav() {
   const eventPageData = await getEventPageData();
@@ -39,10 +39,10 @@ function appendEventsByCategory(category, events, content) {
   }
 
   let template = `
-      <div class="header-nav-folder-item header-nav-folder-item--external">
-        <a href="/#navheading" target="_blank">{title}</a>
-      </div>
-    `;
+    <div class="header-nav-folder-item header-nav-folder-item--external">
+      <a href="/#navheading" target="_blank">{title}</a>
+    </div>
+  `;
   template = template
     .replace("{title}", formatCategoryTitle(category));
 
@@ -54,23 +54,25 @@ function appendEventsByCategory(category, events, content) {
 
 function appendBottomLinks(content) {
   let seeAllEventsElement = `
-              <div class="header-nav-folder-item">
-                <a href="/events">
-                  <span class="header-nav-folder-item-content">
-                    All upcoming events
-                  </span>
-                </a>
-              </div>`;
+    <div class="header-nav-folder-item">
+      <a href="/events">
+        <span class="header-nav-folder-item-content">
+          All upcoming events
+        </span>
+      </a>
+    </div>
+  `;
   content.append(createElementFromHtml(seeAllEventsElement));
 
   let previousEventsElement = `
-              <div class="header-nav-folder-item">
-                <a href="/archive/events">
-                  <span class="header-nav-folder-item-content">
-                    Past events
-                  </span>
-                </a>
-              </div>`;
+    <div class="header-nav-folder-item">
+      <a href="/archive/events">
+        <span class="header-nav-folder-item-content">
+          Past events
+        </span>
+      </a>
+    </div>
+  `;
   content.append(createElementFromHtml(previousEventsElement));
 }
 
@@ -78,13 +80,14 @@ function appendBottomLinks(content) {
 
 function createEventNavItem(event) {
   let template = `
-              <div class="header-nav-folder-item">
-                <a href="{href}">
-                  <span class="header-nav-folder-item-content">
-                    {title}
-                  </span>
-                </a>
-              </div>`;
+    <div class="header-nav-folder-item">
+      <a href="{href}">
+        <span class="header-nav-folder-item-content">
+          {title}
+        </span>
+      </a>
+    </div>
+  `;
 
   template = template
     .replace("{title}", event.title)
@@ -108,17 +111,12 @@ function customSortCategories(category_a, category_b) {
   if (category_a === "uncategorized" && category_b === "uncategorized") {
     return 0;
   }
-  if (category_b === "uncategorized") {
+  if (category_b === "uncategorized"
+    || (category_a.toLowerCase() < category_b.toLowerCase())) {
     return -1;
   }
-  if (category_a === "uncategorized") {
-    return 1;
-  }
-
-  if (category_a.toLowerCase() < category_b.toLowerCase()) {
-    return -1;
-  }
-  if (category_a.toLowerCase() > category_b.toLowerCase()) {
+  if (category_a === "uncategorized"
+    || (category_a.toLowerCase() > category_b.toLowerCase())) {
     return 1;
   }
 
