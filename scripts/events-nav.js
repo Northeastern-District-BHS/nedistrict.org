@@ -19,7 +19,7 @@ const baseMobileEventsNavHtml = `
 `;
 
 const baseMobileEventsDataFolderHtml = `
-  <div data-folder="/events" class="header-menu-nav-folder header-menu-nav-folder--active">
+  <div data-folder="/events" class="header-menu-nav-folder">
     <div class="header-menu-nav-folder-content" id="mobile-events">
       <div class="header-menu-controls container header-menu-nav-item">
         <a class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0"><span style="margin-right: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span>
