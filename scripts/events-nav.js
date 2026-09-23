@@ -19,12 +19,25 @@ async function updateEventsNav() {
   const eventsNavButton = document.querySelectorAll("a[href='/events']")[0].parentElement;
   const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
   eventsNavButton.replaceWith(createEventsNav(upcomingEvents));
-  eventsMobileNavButton.replaceWith(createEventsNav(upcomingEvents));
+  //eventsMobileNavButton.replaceWith(createEventsNav(upcomingEvents));
 
   console.log("Events Nav Mod Initialized!");
 }
 
 function createEventsNav(events) {
+  const topLevelNavFolder = createElementFromHtml(baseEventsNavHtml);
+  const contentFolder = topLevelNavFolder.querySelector("#events");
+  const categorizedEvents = sortCategorizedEvents(groupByPrimaryCategory(events));
+
+  for (const [category, events] of Object.entries(categorizedEvents)) {
+    appendEventsByCategory(category, events, contentFolder)
+  }
+  appendBottomLinks(contentFolder);
+
+  return topLevelNavFolder;
+}
+
+function createMobileEventsNav(events) {
   const topLevelNavFolder = createElementFromHtml(baseEventsNavHtml);
   const contentFolder = topLevelNavFolder.querySelector("#events");
   const categorizedEvents = sortCategorizedEvents(groupByPrimaryCategory(events));
