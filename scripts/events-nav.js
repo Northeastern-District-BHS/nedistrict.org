@@ -22,7 +22,7 @@ const baseMobileEventsDataFolderHtml = `
   <div data-folder="/events" class="header-menu-nav-folder">
     <div class="header-menu-nav-folder-content" id="mobile-events">
       <div class="header-menu-controls container header-menu-nav-item">
-        <a class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0"><span style="margin-right: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span>
+        <a id="events-back" class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0"><span style="margin-right: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span>
           <span>Back</span>
         </a>
       </div>
@@ -39,7 +39,7 @@ async function updateEventsNav() {
   if (!upcomingEvents || upcomingEvents.length === 0)
     return;
 
-  const categorizedEvents = 
+  const categorizedEvents =
     sortCategorizedEvents(groupByPrimaryCategory(upcomingEvents));
 
   const eventsNavButton = document.querySelectorAll("a[href='/events']")[0].parentElement;
@@ -75,16 +75,22 @@ function createEventsNav(categorizedEvents) {
 
 function createMobileEventsNav(categorizedEvents) {
   const topLevelNavFolder = createElementFromHtml(baseMobileEventsNavHtml);
+  topLevelNavFolder.addEventListener("click", this.handleItemSelect);
 
   createMobileNavDataFolder(categorizedEvents);
 
   return topLevelNavFolder;
 }
 
+
 function createMobileNavDataFolder(categorizedEvents) {
   const moblieNav = document.querySelector("nav[class='header-menu-nav-list']")
   const eventsFolderElement = createElementFromHtml(baseMobileEventsDataFolderHtml);
   const eventsFolderContent = eventsFolderElement.querySelector("#mobile-events");
+
+  const eventsBackButton = eventsFolderElement.querySelector("#events-back");
+  eventsFolderElement.addEventListener('click', this.handleItemSelect),
+  eventsBackButton && eventsBackButton.addEventListener('click', this.onParentFolderOpen);
 
   let template = `
     <div class="container header-menu-nav-item">
