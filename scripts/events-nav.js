@@ -9,7 +9,7 @@ const baseEventsNavHtml = `
 
 const baseMobileEventsNavHtml = `
   <div class="container header-menu-nav-item">
-    <a data-folder-id="/operations" href="/operations">
+    <a data-folder-id="/events" href="/events">
       <div class="header-menu-nav-item-content header-menu-nav-item-content-folder">
         <span class="visually-hidden">Folder:</span>
         <span class="header-nav-folder-title-text">Events</span>
