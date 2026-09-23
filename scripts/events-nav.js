@@ -76,10 +76,8 @@ function createEventsNav(categorizedEvents) {
 
 function createMobileEventsNav(categorizedEvents) {
   const topLevelNavFolder = createElementFromHtml(baseMobileEventsNavHtml);
-  topLevelNavFolder.addEventListener("click", this.handleItemSelect);
 
   createMobileNavDataFolder(categorizedEvents);
-
   return topLevelNavFolder;
 }
 
