@@ -13,7 +13,6 @@ const baseMobileEventsNavHtml = `
       <div class="header-menu-nav-item-content header-menu-nav-item-content-folder">
         <span class="visually-hidden">Folder:</span>
         <span class="header-nav-folder-title-text">Events</span>
-      <span style="margin-left: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span></div>
     </a>
   </div>
 `;
