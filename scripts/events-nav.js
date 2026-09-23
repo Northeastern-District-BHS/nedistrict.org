@@ -43,9 +43,10 @@ async function updateEventsNav() {
     sortCategorizedEvents(groupByPrimaryCategory(upcomingEvents));
 
   const eventsNavButton = document.querySelectorAll("a[href='/events']")[0].parentElement;
-  const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
   eventsNavButton.replaceWith(createEventsNav(categorizedEvents));
-  eventsMobileNavButton.replaceWith(createMobileEventsNav(categorizedEvents));
+
+  //const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
+  // eventsMobileNavButton.replaceWith(createMobileEventsNav(categorizedEvents));
 
   console.info("Events Nav Mod Initialized!");
 }
