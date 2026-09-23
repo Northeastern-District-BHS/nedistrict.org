@@ -16,8 +16,10 @@ async function updateEventsNav() {
   if (!upcomingEvents || upcomingEvents.length === 0)
     return;
 
-  const eventsNavButton = document.querySelector("a[href='/events']").parentElement;
+  const eventsNavButton = document.querySelectorAll("a[href='/events']")[0].parentElement;
+  const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
   eventsNavButton.replaceWith(createEventsNav(upcomingEvents));
+  eventsMobileNavButton.replaceWith(createEventsNav(upcomingEvents));
 }
 
 function createEventsNav(events) {
