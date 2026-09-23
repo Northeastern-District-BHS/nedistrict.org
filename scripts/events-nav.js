@@ -47,7 +47,7 @@ async function updateEventsNav() {
   eventsNavButton.replaceWith(createEventsNav(categorizedEvents));
   eventsMobileNavButton.replaceWith(createMobileEventsNav(categorizedEvents));
 
-  console.log("Events Nav Mod Initialized!");
+  console.info("Events Nav Mod Initialized!");
 }
 
 function createEventsNav(categorizedEvents) {
@@ -69,6 +69,7 @@ function createEventsNav(categorizedEvents) {
   }
   appendBottomLinks(contentFolder, template);
 
+  console.info("Desktop Nav Injected!")
   return topLevelNavFolder;
 }
 
@@ -101,6 +102,7 @@ function createMobileNavDataFolder(categorizedEvents) {
   appendBottomLinks(eventsFolderContent, template);
 
   moblieNav.appendChild(eventsFolderElement);
+  console.info("Mobile Nav Injected!")
 }
 
 
