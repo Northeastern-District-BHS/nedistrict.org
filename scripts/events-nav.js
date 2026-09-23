@@ -7,6 +7,29 @@ const baseEventsNavHtml = `
   </div>
 `;
 
+const baseMobileEventsNavHtml = `
+  <div class="container header-menu-nav-item">
+    <a data-folder-id="/operations" href="/operations">
+      <div class="header-menu-nav-item-content header-menu-nav-item-content-folder">
+        <span class="visually-hidden">Folder:</span>
+        <span class="header-nav-folder-title-text">Events</span>
+      <span style="margin-left: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span></div>
+    </a>
+  </div>
+`;
+
+const baseMobileEventsDataFolderHtml = `
+  <div data-folder="/events" class="header-menu-nav-folder header-menu-nav-folder--active">
+    <div class="header-menu-nav-folder-content" id="mobile-events">
+      <div class="header-menu-controls container header-menu-nav-item">
+        <a class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0"><span style="margin-right: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span>
+          <span>Back</span>
+        </a>
+      </div>
+    </div>
+  </div>
+`;
+
 async function updateEventsNav() {
   const eventPageData = await getEventPageData();
   const upcomingEvents = eventPageData
@@ -16,86 +39,21 @@ async function updateEventsNav() {
   if (!upcomingEvents || upcomingEvents.length === 0)
     return;
 
+  const categorizedEvents = 
+    sortCategorizedEvents(groupByPrimaryCategory(upcomingEvents));
+
   const eventsNavButton = document.querySelectorAll("a[href='/events']")[0].parentElement;
   const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
-  eventsNavButton.replaceWith(createEventsNav(upcomingEvents));
-  //eventsMobileNavButton.replaceWith(createEventsNav(upcomingEvents));
+  eventsNavButton.replaceWith(createEventsNav(categorizedEvents));
+  eventsMobileNavButton.replaceWith(createMobileEventsNav(categorizedEvents));
 
   console.log("Events Nav Mod Initialized!");
 }
 
-function createEventsNav(events) {
+function createEventsNav(categorizedEvents) {
   const topLevelNavFolder = createElementFromHtml(baseEventsNavHtml);
   const contentFolder = topLevelNavFolder.querySelector("#events");
-  const categorizedEvents = sortCategorizedEvents(groupByPrimaryCategory(events));
 
-  for (const [category, events] of Object.entries(categorizedEvents)) {
-    appendEventsByCategory(category, events, contentFolder)
-  }
-  appendBottomLinks(contentFolder);
-
-  return topLevelNavFolder;
-}
-
-function createMobileEventsNav(events) {
-  const topLevelNavFolder = createElementFromHtml(baseEventsNavHtml);
-  const contentFolder = topLevelNavFolder.querySelector("#events");
-  const categorizedEvents = sortCategorizedEvents(groupByPrimaryCategory(events));
-
-  for (const [category, events] of Object.entries(categorizedEvents)) {
-    appendEventsByCategory(category, events, contentFolder)
-  }
-  appendBottomLinks(contentFolder);
-
-  return topLevelNavFolder;
-}
-
-function appendEventsByCategory(category, events, content) {
-  if (category == "uncategorized") {
-    category = "Other"
-  }
-
-  let template = `
-    <div class="header-nav-folder-item header-nav-folder-item--external">
-      <a href="/#navheading" target="_blank">{title}</a>
-    </div>
-  `;
-  template = template
-    .replace("{title}", formatCategoryTitle(category));
-
-  content.append(createElementFromHtml(template));
-  events.forEach((event) => {
-    content.append(createEventNavItem(event));
-  });
-}
-
-function appendBottomLinks(content) {
-  let seeAllEventsElement = `
-    <div class="header-nav-folder-item">
-      <a href="/events">
-        <span class="header-nav-folder-item-content">
-          All upcoming events
-        </span>
-      </a>
-    </div>
-  `;
-  content.append(createElementFromHtml(seeAllEventsElement));
-
-  let previousEventsElement = `
-    <div class="header-nav-folder-item">
-      <a href="/archive/events">
-        <span class="header-nav-folder-item-content">
-          Past events
-        </span>
-      </a>
-    </div>
-  `;
-  content.append(createElementFromHtml(previousEventsElement));
-}
-
-// UTILS
-
-function createEventNavItem(event) {
   let template = `
     <div class="header-nav-folder-item">
       <a href="{href}">
@@ -105,6 +63,81 @@ function createEventNavItem(event) {
       </a>
     </div>
   `;
+
+  for (const [category, events] of Object.entries(categorizedEvents)) {
+    appendEventsByCategory(category, events, contentFolder, template)
+  }
+  appendBottomLinks(contentFolder, template);
+
+  return topLevelNavFolder;
+}
+
+function createMobileEventsNav(categorizedEvents) {
+  const topLevelNavFolder = createElementFromHtml(baseMobileEventsNavHtml);
+
+  createMobileNavDataFolder(categorizedEvents);
+
+  return topLevelNavFolder;
+}
+
+function createMobileNavDataFolder(categorizedEvents) {
+  const moblieNav = document.querySelector("nav[class='header-menu-nav-list']")
+  const eventsFolderElement = createElementFromHtml(baseMobileEventsDataFolderHtml);
+  const eventsFolderContent = eventsFolderElement.querySelector("#mobile-events");
+
+  let template = `
+    <div class="container header-menu-nav-item">
+      <a href="{href}" tabindex="0">
+        <div class="header-menu-nav-item-content">
+          {title}
+        </div>
+      </a>
+    </div>
+  `;
+
+  for (const [category, events] of Object.entries(categorizedEvents)) {
+    appendEventsByCategory(category, events, eventsFolderContent, template)
+  }
+  appendBottomLinks(eventsFolderContent, template);
+
+  moblieNav.appendChild(eventsFolderElement);
+}
+
+
+function appendEventsByCategory(category, events, content, template) {
+  if (category == "uncategorized") {
+    category = "Other"
+  }
+  let headerTemplate = `
+    <div class="header-nav-folder-item header-nav-folder-item--external">
+      <a href="/#navheading" target="_blank">{title}</a>
+    </div>
+  `;
+
+  headerTemplate = headerTemplate
+    .replace("{title}", formatCategoryTitle(category));
+
+  content.append(createElementFromHtml(headerTemplate));
+  events.forEach((event) => {
+    content.append(createEventNavItem(event, template));
+  });
+}
+
+function appendBottomLinks(content, template) {
+  const seeAllEventsElement = template
+    .replace("{title}", "All upcoming events")
+    .replace("{href}", "/events");
+  content.append(createElementFromHtml(seeAllEventsElement));
+
+  const previousEventsElement = template
+    .replace("{title}", "Past Events")
+    .replace("{href}", "/archive/events")
+  content.append(createElementFromHtml(previousEventsElement));
+}
+
+// UTILS
+
+function createEventNavItem(event, template) {
 
   template = template
     .replace("{title}", event.title)
