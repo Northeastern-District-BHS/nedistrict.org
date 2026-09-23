@@ -21,7 +21,7 @@ const baseMobileEventsDataFolderHtml = `
   <div data-folder="/events" class="header-menu-nav-folder">
     <div class="header-menu-nav-folder-content" id="mobile-events">
       <div class="header-menu-controls container header-menu-nav-item">
-        <a id="events-back" class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0">
+        <a class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0">
           <span>Back</span>
         </a>
       </div>
@@ -45,6 +45,7 @@ async function updateEventsNav() {
   const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
   eventsNavButton.replaceWith(createEventsNav(categorizedEvents));
   eventsMobileNavButton.replaceWith(createMobileEventsNav(categorizedEvents));
+  this.bindListeners();
 
   console.info("Events Nav Mod Initialized!");
 }
@@ -74,7 +75,6 @@ function createEventsNav(categorizedEvents) {
 
 function createMobileEventsNav(categorizedEvents) {
   const topLevelNavFolder = createElementFromHtml(baseMobileEventsNavHtml);
-  topLevelNavFolder.addEventListener("click", this.handleItemSelect);
 
   createMobileNavDataFolder(categorizedEvents);
 
@@ -86,10 +86,6 @@ function createMobileNavDataFolder(categorizedEvents) {
   const moblieNav = document.querySelector("nav[class='header-menu-nav-list']")
   const eventsFolderElement = createElementFromHtml(baseMobileEventsDataFolderHtml);
   const eventsFolderContent = eventsFolderElement.querySelector("#mobile-events");
-
-  const eventsBackButton = eventsFolderElement.querySelector("#events-back");
-  eventsFolderElement.addEventListener('click', this.handleItemSelect),
-  eventsBackButton && eventsBackButton.addEventListener('click', this.onParentFolderOpen);
 
   let template = `
     <div class="container header-menu-nav-item">
