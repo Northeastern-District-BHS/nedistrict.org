@@ -20,6 +20,8 @@ async function updateEventsNav() {
   const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
   eventsNavButton.replaceWith(createEventsNav(upcomingEvents));
   eventsMobileNavButton.replaceWith(createEventsNav(upcomingEvents));
+
+  console.log("Events Nav Mod Initialized!");
 }
 
 function createEventsNav(events) {
