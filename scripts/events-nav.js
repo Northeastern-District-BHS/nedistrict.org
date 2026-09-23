@@ -13,6 +13,7 @@ const baseMobileEventsNavHtml = `
       <div class="header-menu-nav-item-content header-menu-nav-item-content-folder">
         <span class="visually-hidden">Folder:</span>
         <span class="header-nav-folder-title-text">Events</span>
+      <span style="margin-left: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span></div>
     </a>
   </div>
 `;
@@ -21,7 +22,7 @@ const baseMobileEventsDataFolderHtml = `
   <div data-folder="/events" class="header-menu-nav-folder">
     <div class="header-menu-nav-folder-content" id="mobile-events">
       <div class="header-menu-controls container header-menu-nav-item">
-        <a class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0">
+        <a class="header-menu-controls-control header-menu-controls-control--active" data-action="back" href="/" tabindex="0"><span style="margin-right: 0.15em; width: 1em; height: 1em;" class="header-dropdown-icon header-dropdown-flip"><svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" stroke-linecap="square" stroke-linejoin="miter" stroke-width="0.5px"><use href="#openArrowHead"></use></svg></span>
           <span>Back</span>
         </a>
       </div>
@@ -45,7 +46,6 @@ async function updateEventsNav() {
   const eventsMobileNavButton = document.querySelectorAll("a[href='/events']")[2].parentElement;
   eventsNavButton.replaceWith(createEventsNav(categorizedEvents));
   eventsMobileNavButton.replaceWith(createMobileEventsNav(categorizedEvents));
-  this.bindListeners();
 
   console.info("Events Nav Mod Initialized!");
 }
@@ -75,6 +75,7 @@ function createEventsNav(categorizedEvents) {
 
 function createMobileEventsNav(categorizedEvents) {
   const topLevelNavFolder = createElementFromHtml(baseMobileEventsNavHtml);
+  topLevelNavFolder.addEventListener("click", this.handleItemSelect);
 
   createMobileNavDataFolder(categorizedEvents);
 
